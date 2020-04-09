@@ -1,72 +1,71 @@
 #include<stdio.h>
-int arrival_time1[30],arrival_time2[30],priority2[30],process2[30],arrival_time3[30];
-int burst_time1[30],burst_time2[30],burst_time3[30];
-
-
-
-int n,i,at[30],bt[30],pr[30],j=0,k=0,l=0;
-
-int total,x,temp[30],counter=0;
-float avg_waiting_time1=0.0,avg_turnaround_time1=0.0;
-
-
-
-void take_in()
+#include<conio.h>
+struct take_process
 {
-		printf("Enter the no. of process you want to enter\n");
+	int Process_id;
+}pcreate[10],queue[20],swap;
+int burst_time=0; 
+
+int process_create()
+{
+	int n;
+	printf("enter the number of process : ");
 	scanf("%d",&n);
-	for(i=0;i<n;i++)
+	printf("\n");
+	return n;
+}
+//function to execute the process and finish it
+
+
+/*to give the process id,burst time,arrival time
+and sort the array according to arrival time and if arrival time is equal
+then sort according to burst time in main*/
+
+int input()
+{
+	int n=process_create();
+	int l,j;
+
+	for(l=0;l<n;l++)
 	{
-		printf("Enter details of process[%d]\n",i+1);
-		printf("Arrival Time:");
-		scanf("%d",&at[i]);
-		printf("Burst Time:");
-		scanf("%d",&bt[i]);
-		printf("Priority(1 to 15):");
-		scanf("%d",&pr[i]);
-		Total=Total+bt[i];
+		pcreate[l].Process_id=l+1;
+		printf("\nEnter the arrival time of process[%d]: ",l+1);
+		scanf("%d",&pcreate[l].Arrival_time);
+		printf("Enter the burst time of process[%d]: ",l+1);
+		scanf("%d",&pcreate[l].Burst_time);
+		pcreate[l].Priority_num=0;
+		pcreate[l].Waiting_time=0;
+		burst_time=burst_time+pcreate[l].Burst_time;
 	}
-	for(i=0;i<n;i++)
+	for(l=0;l<n;l++)
 	{
-		if(pr[i]>=1&&pr[i]<=5)
+		for(j=0;j<n;j++)
 		{
-			printf("\n\nProcess[%d] belongs to Queue 1\n",i+1);
-			arrival_time1[j]=at[i];
-			burst_time1[j]=bt[i];
-			j++;
-			t1=t1+bt[i];
-		}
-		
-		else if(pr[i]>=6&&pr[i]<=10)
+		if(pcreate[l].Arrival_time<pcreate[j].Arrival_time)
 		{
-			printf("Process[%d] belongs to Queue 2\n",i+1);
-			arrival_time2[k]=at[i];
-			burst_time2[k]=bt[i];
-			priority2[k]=pr[i];
-			process2[k]=k+1;
-			k++;
-			t2=t2+bt[i];
+			swap=pcreate[l];
+			pcreate[l]=pcreate[j];
+			pcreate[j]=swap;
 		}
-		
-		else if(pr[i]>=11&&pr[i]<=15)
+		if(pcreate[l].Arrival_time==pcreate[j].Arrival_time)
 		{
-			printf("Process[%d] belongs to Queue 3\n\n\n\n",i+1);
-			arrival_time3[l]=at[i];
-			burst_time3[l]=bt[i];
-			l++;
-			t3=t3+bt[i];
-		}
+			if(pcreate[l].Burst_time<=pcreate[j].Burst_time)
+			{
+			swap=pcreate[l];
+			pcreate[l]=pcreate[j];
+			pcreate[j]=swap;
+			}
+	 	}
+	    }
 	}
+	return n;
 }
 
 
 
 
 
-int main()
+void main()
 {
-	take_in()
-
-	
-	return 0;
+	input();
 }
