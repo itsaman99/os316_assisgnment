@@ -1,18 +1,87 @@
 #include<stdio.h>
 #include<conio.h>
+#include<windows.h>
+int No_Process();
 int Comp_time,Take_time=0,Flag =-1,i=-1;
 struct take_process
 {
 	int Process_id,Burst_time,Arrival_time,Priority_num,Waiting_time;
 }Create_process[10],Process_queue[20],flag,Final_queue[10];
-
-int process_create()
+int No_Process()
 {
-	int n;
-	printf("enter the number of process : ");
-	scanf("%d",&n);
+	int num;
+	printf("Enter the number of process : ");
+	scanf("%d",&num);
 	printf("\n");
-	return n;
+	return num;
+}
+
+void tab(int x)
+{
+	int i;
+	for(i=0;i<x;i++)
+	{
+		printf("\t");
+	}
+}
+void star(int d)
+{
+	int i;
+	for(i=0;i<d;i++)
+	printf("*");
+}
+void New(int x)
+{
+	int i;
+	for(i=0;i<x;i++)
+	{
+		printf("\n");
+	}
+}
+void line(int x)
+{
+	int i;
+	printf("\n");
+	for(i=0;i<x;i++)
+	printf("_");
+	printf("\n");
+}
+void bar()
+{
+	New(7);
+	tab(5);printf("Displaying the data, Please Wait...\\");
+	Sleep(111);system("cls");New(7);
+	tab(5);printf("Displaying the data, Please Wait...|");
+	Sleep(111);system("cls");New(7);
+	tab(5);printf("Displaying the data, Please Wait.../");
+	Sleep(111);system("cls");New(7);
+	tab(5);printf("Displaying the data, Please Wait...|");
+	Sleep(111);system("cls");New(7);
+	tab(5);printf("Displaying the data, Please Wait...\\");
+	Sleep(111);system("cls");New(7);
+	tab(5);printf("Displaying the data, Please Wait...|");
+	Sleep(111);system("cls");New(7);
+	tab(5);printf("Displaying the data, Please Wait.../");
+	Sleep(111);system("cls");New(7);
+	tab(5);printf("Displaying the data, Please Wait...|");
+	Sleep(111);system("cls");New(7);
+	tab(5);printf("Displaying the data, Please Wait...\\");
+	Sleep(111);system("cls");New(7);
+	tab(5);printf("Displaying the data, Please Wait...|");
+	Sleep(111);system("cls");New(7);
+	tab(5);printf("Displaying the data, Please Wait.../");
+	Sleep(111);system("cls");New(7);
+	tab(5);printf("Displaying the data, Please Wait...|");
+	Sleep(111);system("cls");New(7);
+	tab(5);printf("Displaying the data, Please Wait...\\");
+	Sleep(111);system("cls");New(7);
+	tab(5);printf("Displaying the data, Please Wait...|");
+	Sleep(111);system("cls");New(7);
+	tab(5);printf("Displaying the data, Please Wait.../");
+	Sleep(111);system("cls");New(7);
+	tab(5);printf("Displaying the data, Please Wait...|");
+	Sleep(111);system("cls");New(6);star(110);New(1);
+	tab(5);printf("The Data that you have Entered.");
 }
 //function to execute the process and finish it
 
@@ -20,6 +89,61 @@ int process_create()
 /*to give the process id,burst time,arrival time
 and sort the array according to arrival time and if arrival time is equal
 then sort according to burst time in main*/
+void Round_Robin_algo()
+{
+	if(Flag>=0)
+	{
+		int wait,j;
+		//to increase the Priority_numity and decrease the burst time of Priority_numity in excecution
+		if(Take_time!=0 && Process_queue[0].Burst_time!=0)
+		{
+			Process_queue[0].Burst_time--;
+			Take_time--;
+			Process_queue[0].Priority_num++;
+			Process_queue[0].Arrival_time=Comp_time+1;
+			Comp_time++;
+		//to increase the wait and Priority_numity of waiting process	
+			for(wait=1;wait<=Flag;wait++)
+			{
+				Process_queue[wait].Priority_num+=2;
+				Process_queue[wait].Waiting_time=++Process_queue[wait].Waiting_time;
+			}
+		}
+		//if process gets completed ,it is put in Final_queue Process_queue
+		if(Process_queue[0].Burst_time==0)
+		{
+			i++;
+			Final_queue[i]=Process_queue[0];
+			for(wait=0;wait<Flag;wait++)
+			{
+				Process_queue[wait]=Process_queue[wait+1];
+			}
+			Flag--;
+		}
+		//to sort the process again in by Priority_numity
+		for(wait=0;wait<Flag;wait++)
+		{
+			for(j=0;j<Flag;j++)
+			{
+				if(Process_queue[wait].Priority_num<=Process_queue[j].Priority_num)
+				{
+					flag=Process_queue[wait];
+					Process_queue[wait]=Process_queue[j];
+					Process_queue[j]=flag;
+				}
+			}
+		}
+		if(Process_queue[0].Priority_num<=Process_queue[1].Priority_num && Flag>=1)
+		{
+			flag=Process_queue[0];
+			for(wait=0;wait<Flag;wait++)
+			{
+				Process_queue[wait]=Process_queue[wait+1];
+			}
+			Process_queue[Flag]=flag;
+		}
+	}
+}
 
 int Take_input()
 {
@@ -64,19 +188,21 @@ int Take_input()
 
 int display()
 {
-	int l,j,count=0;
-	int n=Take_input();
+	system("cls");
+	int l,j,count=0,n=Take_input();
 	//	printing the sorted process id with respect to arrival time and if arrival time is equal than burst time.
-	printf("VALUES ENTERED:\n*(TABLE SORTED ACCORDING TO THE AARIVAL TIME)\n\n");
-	printf("               PROCESS TABLE \n");
-	printf("\n.............................................\n");
-	printf(" PROCESS ID           ARRIVAL TIME        SERVICE TIME \n");
-	printf("\n.............................................\n");
+	bar();
+	printf("\n");star(110);New(1);
+	line(110);
+	tab(2);printf("PROCESS ID");tab(2);printf("ARRIVAL TIME");tab(2);printf("SERVICE TIME\n");
+	
 	for(l=0;l<n;l++)
 	{
-		printf(" %d            	   %d                   %d\n",Create_process[l].Process_id,Create_process[l].Arrival_time,Create_process[l].Burst_time );
+		tab(2);printf("   P%d",Create_process[l].Process_id);tab(3);printf("   %d",Create_process[l].Arrival_time);tab(3);printf("   %d\n",Create_process[l].Burst_time );
 	}
+	line(110);
 	Comp_time=Create_process[0].Arrival_time;
+	for(j=Create_process[0].Arrival_time;j<=Create_process[n-1].Arrival_time;j++)
 	for(j=Create_process[0].Arrival_time;j<=Create_process[n-1].Arrival_time;j++)
 	{
 		for(l=0;l<n;l++)
